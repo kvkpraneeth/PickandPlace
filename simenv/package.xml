@@ -1,0 +1,16 @@
+<package format='2'>
+
+  <name>simenv</name>
+  <version>1.0.0</version>
+  <description>
+  Simulation Environment
+  </description>
+  <maintainer email="praneeth.pep@gmail.com">kvk praneeth</maintainer>
+  <license>BSD</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>urdf</depend>
+  <depend>gazebo_ros</depend>
+
+</package>

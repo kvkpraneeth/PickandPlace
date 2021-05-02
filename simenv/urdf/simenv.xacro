@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+
+<robot name="lemons" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:include filename="$(find simenv)/urdf/arm.xacro"/>    
+
+  <link name="arm0"/>
+
+  <xacro:arm x="0" y= "0" z="0" parent="arm0"/>
+
+</robot>

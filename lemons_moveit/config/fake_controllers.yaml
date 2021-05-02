@@ -1,0 +1,13 @@
+controller_list:
+  - name: fake_lemons_arm_controller
+    joints:
+      - rotation1
+      - rotation2
+      - prismatic1
+  - name: fake_lemons_hand_controller
+    joints:
+      - left_gripper_finger_joint
+      - right_gripper_finger_joint
+initial:  # Define initial robot poses.
+  - group: lemons_arm
+    pose: home

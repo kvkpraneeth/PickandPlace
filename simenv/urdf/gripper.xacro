@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+    <xacro:macro name="gripper" params="parent x y z r p yaw">
+      <link name="gripper_link">
+        <inertial>
+          <origin xyz="0 0 0" rpy="0 0 0"/>
+          <mass value="0.3"/>
+          <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0002" iyz="0" izz="0.0001"/>
+        </inertial>
+        <visual>
+          <origin xyz="0 0 0" rpy="0 0 0"/>
+          <geometry>
+            <mesh filename="package://simenv/meshes/gripper/gripper_base.dae" scale="0.5 0.5 0.5"/>
+          </geometry>
+        </visual>
+        <collision>
+          <origin xyz="0 0 0" rpy="0 0 0"/>
+          <geometry>
+            <mesh filename="package://simenv/meshes/gripper/gripper_base.dae" scale="0.5 0.5 0.5"/>
+          </geometry>
+        </collision>
+      </link>
+      <link name="right_gripper_finger_link">
+        <inertial>
+          <origin xyz="0 0 0" rpy="0 0 0"/>
+          <mass value="0.1"/>
+          <inertia ixx="0.002" ixy="0" ixz="0" iyy="0.0002" iyz="0" izz="0.0002"/>
+        </inertial>
+        <visual>
+          <origin xyz="0 0 0" rpy="0 0 0"/>
+          <geometry>
+            <mesh filename="package://simenv/meshes/gripper/finger_right.dae" scale="0.5 0.5 0.5"/>
+          </geometry>
+        </visual>
+        <collision>
+          <origin xyz="0 0 0" rpy="0 0 0"/>
+          <geometry>
+            <mesh filename="package://simenv/meshes/gripper/finger_right_collision.dae" scale="0.5 0.5 0.5"/>
+          </geometry>
+        </collision>
+      </link>
+      <link name="left_gripper_finger_link">
+        <inertial>
+          <origin xyz="0 0 0" rpy="0 0 0"/>
+          <mass value="0.1"/>
+          <inertia ixx="0.002" ixy="0" ixz="0" iyy="0.0002" iyz="0" izz="0.0002"/>
+        </inertial>
+        <visual>
+          <origin xyz="0 0 0" rpy="0 0 0"/>
+          <geometry>
+            <mesh filename="package://simenv/meshes/gripper/finger_left.dae" scale="0.5 0.5 0.5"/>
+          </geometry>
+        </visual>
+        <collision>
+          <origin xyz="0 0 0" rpy="0 0 0"/>
+          <geometry>
+            <mesh filename="package://simenv/meshes/gripper/finger_left_collision.dae" scale="0.5 0.5 0.5"/>
+          </geometry>
+        </collision>
+      </link>
+
+      <joint name="right_gripper_finger_joint" type="prismatic">
+        <origin rpy="0 0 0" xyz="0.078 -0.0725 0" />
+        <parent link="gripper_link" />
+        <child link="right_gripper_finger_link" />
+        <axis xyz="0 1 0" />
+        <limit effort="100" lower="-0.01" upper="0.06" velocity="0.05" />
+        <dynamics damping="0.7" />
+      </joint>
+
+      <joint name="left_gripper_finger_joint" type="prismatic">
+        <origin rpy="0 0 0" xyz="0.078 0.0725 0" />
+        <parent link="gripper_link" />
+        <child link="left_gripper_finger_link" />
+        <axis xyz="0 -1 0" />
+        <limit effort="100" lower="-0.01" upper="0.06" velocity="0.05" />
+        <dynamics damping="0.7" />
+      </joint>
+
+      <joint name="gripper_joint" type="fixed">
+        <parent link="${parent}"/>
+        <child link="gripper_link"/>
+        <origin xyz="${x} ${y} ${z}" rpy="${r} ${p} ${yaw}"/>
+        <axis xyz="0 1 0" />
+      </joint>
+
+    
+    </xacro:macro>
+</robot>

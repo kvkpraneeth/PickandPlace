@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: simenv
+    relative_path: urdf/simenv.urdf
+    xacro_args: ""
+  SRDF:
+    relative_path: config/lemons.srdf
+  CONFIG:
+    author_name: Kvk Praneeth
+    author_email: praneeth.pep@gmail.com
+    generated_timestamp: 1619973999

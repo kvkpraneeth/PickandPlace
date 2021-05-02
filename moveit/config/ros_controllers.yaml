@@ -26,26 +26,7 @@ joint_state_controller:
     name: "joint_state_controller"
     action_ns: ""
 
-# gazebo_ros_control:
-#
-#     pid_gains:
-#
-#         rotation1:
-#             p: 100.0
-#             i: 0.01
-#             d: 10.0
-#
-#         rotation2:
-#             p: 100.0
-#             i: 0.01
-#             d: 10.0
-#
-#         prismatic1:
-#             p: 100.0
-#             i: 0.01
-#             d: 10.0
-
-arm_position_controller:
+arm_controller:
     type: effort_controllers/JointTrajectoryController
     joints:
         - rotation1
@@ -53,8 +34,8 @@ arm_position_controller:
         - prismatic1
     gains:
         rotation1:
-            p: 100
-            d: 10.0
+            p: 100.0
+            d: 50.0
             i: 0.01
             i_clamp: 1
 
@@ -65,9 +46,31 @@ arm_position_controller:
             i_clamp: 1
 
         prismatic1:
-            p: 100.0
-            i: 0.01
+            p: 15000.0
+            i: 0.1
             d: 10.0
+            i_clamp: 1
+
+    constraints:
+        goal_time: 2.0
+
+
+hand_controller:
+    type: effort_controllers/JointTrajectoryController
+    joints:
+        - left_gripper_finger_joint
+        - right_gripper_finger_joint
+    gains:
+        left_gripper_finger_joint:
+            p: 100.0
+            d: 50.0
+            i: 0.01
+            i_clamp: 1
+
+        right_gripper_finger_joint:
+            p: 100.0
+            d: 10.0
+            i: 0.01
             i_clamp: 1
 
     constraints:
@@ -75,7 +78,7 @@ arm_position_controller:
 
 controller_list:
 
-    - name: arm_position_controller
+    - name: arm_controller
       action_ns: follow_joint_trajectory
       type: FollowJointTrajectory
       default: true
@@ -84,4 +87,10 @@ controller_list:
           - rotation2
           - prismatic1
 
-
+    - name: hand_controller
+      action_ns: follow_joint_trajectory
+      type: FollowJointTrajectory
+      default: true
+      joints:
+          - left_gripper_finger_joint
+          - right_gripper_finger_joint

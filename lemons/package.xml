@@ -1,0 +1,17 @@
+<package format='2'>
+
+  <name>lemons</name>
+  <version>1.0.0</version>
+  <description>
+  Bringup Package
+  </description>
+  <maintainer email="praneeth.pep@gmail.com">kvk praneeth</maintainer>
+  <license>BSD</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>lemons_moveit</depend>
+  <depend>simenv</depend>
+
+</package>
+

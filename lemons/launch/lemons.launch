@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <launch>
-  
+
+  <arg name="db" default="false" />
+  <arg name="db_path" default="$(find lemons_moveit)/default_warehouse_mongo_db" />
   <arg name="debug" default="false" />
   <arg name="use_gui" default="false" />
   <arg name="gazebo_gui" default="true"/>
@@ -13,9 +15,39 @@
     <arg name="urdf_path" value="$(arg urdf_path)"/>
   </include>
 
-  <param name="Belt" command="$(find xacro)/xacro '$(find simenv)/urdf/belt.xacro'"/> 
+  <include file="$(find lemons_moveit)/launch/planning_context.launch">
+    <arg name="load_robot_description" value="false"/>
+  </include>
+
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" unless="$(arg use_gui)">
+    <rosparam param="source_list">[move_group/fake_controller_joint_states]</rosparam>
+    <rosparam param="source_list">[/joint_states]</rosparam>
+  </node>
   
+  <node name="joint_state_publisher" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" if="$(arg use_gui)">
+    <rosparam param="source_list">[move_group/fake_controller_joint_states]</rosparam>
+    <rosparam param="source_list">[/joint_states]</rosparam>
+  </node>
+
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="true" output="screen" />
+
+  <include file="$(find lemons_moveit)/launch/move_group.launch">
+    <arg name="allow_trajectory_execution" value="true"/>
+    <arg name="fake_execution" value="false"/>
+    <arg name="info" value="true"/>
+    <arg name="debug" value="$(arg debug)"/>
+  </include>  
+
+  <param name="Belt" command="$(find xacro)/xacro '$(find simenv)/urdf/belt.xacro'"/> 
+  <param name="Object" command="$(find xacro)/xacro $(find simenv)/urdf/cube.urdf"/> 
+
   <node name="belt" pkg="gazebo_ros" type="spawn_model" args="-urdf -param Belt -model belt -x 2.0 -y 0.2 -z 0.1" />
   <node name="belt1" pkg="gazebo_ros" type="spawn_model" args="-urdf -param Belt -model belt1 -x -2.0 -y 0.2 -z 0.1" />
+
+  <node pkg="tf2_ros" type="static_transform_publisher" name="virtualLinkBroadcaster0" args="0 0 0 0 0 0 1 arm0 virtualLink" />
+  <node pkg="tf2_ros" type="static_transform_publisher" name="virtualLinkBroadcaster1" args="0 0 0 0 0 0 1 belt virtualLink" />
+  <node pkg="tf2_ros" type="static_transform_publisher" name="virtualLinkBroadcaster2" args="0 0 0 0 0 0 1 belt1 virtualLink" />
+
+  <node name="obj" pkg="gazebo_ros" type="spawn_model" args="-urdf -param Object -model obj -x 1.796401 -y -0.178903 -z 0.200416" launch-prefix="bash -c 'sleep 1.0; $0 $@' "/>
 
 </launch>

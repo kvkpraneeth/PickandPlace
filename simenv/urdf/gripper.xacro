@@ -85,7 +85,5 @@
         <origin xyz="${x} ${y} ${z}" rpy="${r} ${p} ${yaw}"/>
         <axis xyz="0 1 0" />
       </joint>
-
-    
     </xacro:macro>
 </robot>

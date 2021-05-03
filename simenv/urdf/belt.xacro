@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <robot name="belt">
 
-  <link name="world"/>
+  <link name="virtualLink"/>
 
   <joint name="joint_fix" type="fixed">
-    <parent link="world"/>
+    <parent link="virtualLink"/>
     <child link="belt_base_link"/>
   </joint>
 
@@ -34,7 +34,7 @@
   </link>
 
   <joint name="dbelt_joint" type="planar">
-    <parent link = "world"/>
+    <parent link = "virtualLink"/>
     <child link = "dbelt" />
     <axis xyz="0 1 0"/>
     <limit effort="100" velocity="0.3" lower="0.0" upper="9.0"/>

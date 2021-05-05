@@ -3,6 +3,8 @@
 
 #include "geometry_msgs/Pose.h"
 #include "moveit/robot_model/joint_model_group.h"
+#include "ros/forwards.h"
+#include "ros/node_handle.h"
 #include "ros/ros.h"
 
 #include "moveit/move_group_interface/move_group_interface.h"
@@ -11,11 +13,12 @@
 #include "moveit_msgs/CollisionObject.h"
 
 #include <memory>
+#include "ros/timer.h"
 
 class control
 {
     //Constructor.
-    public: control();
+    public: control(ros::NodeHandle& nh_);
 
     //Destructor.
     public: ~control();
@@ -35,7 +38,13 @@ class control
     public: geometry_msgs::Pose goalPose1;
 
     //Worker Functions.
-    public: void moveToGoal();
+    public: void moveToGoal(const ros::TimerEvent& event);
+
+    //Timer.
+    private: ros::Timer timer;
+
+    //NodeHandle
+    private: ros::NodeHandle nnh_;
 
 };
 

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <launch>
 
+  <!-- <env name="GAZEBO_RESOURCE_PATH" value="$(find simenv)/media/materials"/> -->
+
   <arg name="db" default="false" />
   <arg name="db_path" default="$(find lemons_moveit)/default_warehouse_mongo_db" />
   <arg name="debug" default="false" />
@@ -8,6 +10,8 @@
   <arg name="gazebo_gui" default="true"/>
   <arg name="paused" default="false"/>
   <arg name="urdf_path" default="$(find simenv)/urdf/simenv.urdf"/>
+
+  <rosparam file="$(find lemons)/config/target.yaml" command="load"/>
 
   <include file="$(find lemons_moveit)/launch/gazebo.launch" >
     <arg name="paused" value="$(arg paused)"/>
@@ -39,15 +43,19 @@
   </include>  
 
   <param name="Belt" command="$(find xacro)/xacro '$(find simenv)/urdf/belt.xacro'"/> 
-  <param name="Object" command="$(find xacro)/xacro $(find simenv)/urdf/cube.urdf"/> 
+  <arg name="Object" value="$(find simenv)/models/Apriltag36_11_00000/model.sdf"/> 
+  <param name="Camera" command="$(find xacro)/xacro '$(find simenv)/urdf/cube.urdf'"/> 
+ 
+  <node name="belt" pkg="gazebo_ros" type="spawn_model" args="-urdf -param Belt -model belt -x 1.5 -y 0.2 -z 0.0" />
+  <!-- <node name="belt1" pkg="gazebo_ros" type="spawn_model" args="-urdf -param Belt -model belt1 -x -2.0 -y 0.2 -z 0.0" /> -->
+  <node name="camera" pkg="gazebo_ros" type="spawn_model" args="-urdf -param Camera -model camera -x 2.0 -y -0.15 -z 0.5 -P 1.57" />
 
-  <node name="belt" pkg="gazebo_ros" type="spawn_model" args="-urdf -param Belt -model belt -x 2.0 -y 0.2 -z 0.1" />
-  <node name="belt1" pkg="gazebo_ros" type="spawn_model" args="-urdf -param Belt -model belt1 -x -2.0 -y 0.2 -z 0.1" />
+  <node pkg="tf2_ros" type="static_transform_publisher" name="virtualLinkBroadcaster0" args="0 0 0 0 0 0 1 virtualLink arm0" />
+  <node pkg="tf2_ros" type="static_transform_publisher" name="virtualLinkBroadcaster1" args="1.5 0.2 0 0 0 0 1 virtualLink belt" />
+  <!-- <node pkg="tf2_ros" type="static_transform_publisher" name="virtualLinkBroadcaster2" args="0 0 0 0 0 0 1 virtualLink belt1" /> -->
+  <node pkg="tf2_ros" type="static_transform_publisher" name="virtualLinkBroadcaster3" args="2.0 -0.15 0.5 0 0.707 0 0.707 virtualLink camera" />
 
-  <node pkg="tf2_ros" type="static_transform_publisher" name="virtualLinkBroadcaster0" args="0 0 0 0 0 0 1 arm0 virtualLink" />
-  <node pkg="tf2_ros" type="static_transform_publisher" name="virtualLinkBroadcaster1" args="0 0 0 0 0 0 1 belt virtualLink" />
-  <node pkg="tf2_ros" type="static_transform_publisher" name="virtualLinkBroadcaster2" args="0 0 0 0 0 0 1 belt1 virtualLink" />
-
-  <node name="obj" pkg="gazebo_ros" type="spawn_model" args="-urdf -param Object -model obj -x 1.796401 -y -0.178903 -z 0.200416" launch-prefix="bash -c 'sleep 1.0; $0 $@' "/>
+  <node name="obj" pkg="gazebo_ros" type="spawn_model" args="-file $(arg Object) -sdf -model obj -x 1.796401 -y -0.178903 -z 0.200416" launch-prefix="bash -c 'sleep 1.0; $0 $@' "/>
+  <node name="dynamic" pkg="control" type="dynamic.py"/>
 
 </launch>

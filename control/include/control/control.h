@@ -1,6 +1,7 @@
 #ifndef CONTROL_H
 #define CONTROL_H
 
+#include "gazebo_msgs/GetModelState.h"
 #include "geometry_msgs/Pose.h"
 #include "moveit/robot_model/joint_model_group.h"
 #include "ros/forwards.h"
@@ -13,6 +14,7 @@
 #include "moveit_msgs/CollisionObject.h"
 
 #include <memory>
+#include "ros/service_client.h"
 #include "ros/timer.h"
 
 class control
@@ -36,15 +38,22 @@ class control
 
     //Goal Variables.
     public: geometry_msgs::Pose goalPose1;
+            gazebo_msgs::GetModelState modelState;
+            gazebo_msgs::GetModelState modelState1;
 
     //Worker Functions.
     public: void moveToGoal(const ros::TimerEvent& event);
+    public: void updateParam(const ros::TimerEvent& event);
 
     //Timer.
     private: ros::Timer timer;
+    private: ros::Timer paramTimer;
 
-    //NodeHandle
+    //NodeHandle.
     private: ros::NodeHandle nnh_;
+
+    //Service Client.
+    private: ros::ServiceClient client;
 
 };
 

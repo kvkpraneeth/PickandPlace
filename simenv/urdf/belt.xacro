@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <robot name="belt">
 
-  <link name="virtualLink"/>
-
-  <joint name="joint_fix" type="fixed">
-    <parent link="virtualLink"/>
-    <child link="belt_base_link"/>
-  </joint>
-
   <link name="belt_base_link">
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -34,13 +27,19 @@
   </link>
 
   <joint name="dbelt_joint" type="planar">
-    <parent link = "virtualLink"/>
+    <parent link = "belt_base_link"/>
     <child link = "dbelt" />
     <axis xyz="0 1 0"/>
     <limit effort="100" velocity="0.3" lower="0.0" upper="9.0"/>
   </joint>
 
   <link name="dbelt">
+    <visual>
+      <origin xyz="0 -4.25 -0.01" rpy="0 0 0"/>
+      <geometry>
+        <box size= "1.0 0.5 0.01"/>
+      </geometry>
+    </visual>
     <collision>
       <origin xyz="0 -4.25 -0.01" rpy="0 0 0"/>
       <geometry>
@@ -65,6 +64,21 @@
       <odometryRate>20.0</odometryRate>
       <robotBaseFrame>dbelt</robotBaseFrame>
     </plugin>
+  </gazebo>
+
+  <gazebo reference="belt_base_link">
+    <mu1>30</mu1>
+    <mu2>30</mu2>
+    <kp>1000000</kp>
+    <kd>1</kd>
+    <static>1</static>
+  </gazebo>
+
+  <gazebo reference="dbelt">
+    <mu1>30</mu1>
+    <mu2>30</mu2>
+    <kp>1000000</kp>
+    <kd>1</kd>
   </gazebo>
 
 </robot>

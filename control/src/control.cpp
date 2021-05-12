@@ -36,7 +36,6 @@ control::control(ros::NodeHandle &nh_)
 
     this->modelState1.request.model_name = "obj";
     this->modelState1.request.relative_entity_name = "gripper_link";
-
 }
 
 control::~control()
